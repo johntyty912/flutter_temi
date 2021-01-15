@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
+
 class FlutterTemi {
   //Single Method Channel
   static const MethodChannel _channel = const MethodChannel('flutter_temi');
@@ -20,11 +21,14 @@ class FlutterTemi {
   static const EventChannel _nlpEventChannel =
       EventChannel('flutter_temi/nlp_stream');
 
-  static const EventChannel _onUserInteractionEventChannel =
+  static const EventChannel _onUserIntaeractionEventChannel =
       EventChannel('flutter_temi/on_user_interaction_stream');
 
   static const EventChannel _ttsEventChannel =
       EventChannel('flutter_temi/tts_stream');
+
+  static const EventChannel _asrEventChannel =
+      EventChannel('flutter_temi/asr_stream');
 
   static const EventChannel _wakeupWordEventChannel =
       EventChannel('flutter_temi/wakeup_word_stream');
@@ -77,6 +81,27 @@ class FlutterTemi {
   static temiSpeak(String speech) async {
     await _channel.invokeMethod('temi_speak', speech);
   }
+
+  static temiShowAppList() async {
+    await _channel.invokeMethod('temi_showAppList');
+  }
+
+
+  static temiSpeakForce(String speech) async {
+    await _channel.invokeMethod('temi_speak_force', speech);
+  }
+  static temiFinisheConverstaion() async {
+    await _channel.invokeMethod('temi_finishe_conversation');
+  }
+
+  static temiTurnKioskMode() async {
+    await _channel.invokeMethod('temi_turnKoiskMode');
+  }
+
+  static temiRepose() async {
+    await _channel.invokeMethod('temi_repose');
+  }
+
 
   static temiGoTo(String location) async {
     await _channel.invokeMethod('temi_goto', location);
@@ -133,7 +158,8 @@ class FlutterTemi {
         .invokeMethod('temi_start_telepresence', [displayName, peerId]);
   }
 
-  static Future<Map<String, dynamic>> get userInfo async {
+  //${some['name']} ${some['userId']}
+  static Future<Map<dynamic, dynamic>> get userInfo async {
     return await _channel.invokeMethod('temi_user_info');
   }
 
@@ -147,6 +173,10 @@ class FlutterTemi {
 
   static temiSetWakeup(bool disable) async {
     await _channel.invokeMethod('temi_toggle_wakeup', disable);
+  }
+
+  static temiWakeup() async {
+    await _channel.invokeMethod('temi_wakeup');
   }
 
   static temiSetNavigationBillboard(bool hide) async {
@@ -170,11 +200,15 @@ class FlutterTemi {
   }
 
   static Stream<bool> temiSubscribeToOnUserInteractionEvents() {
-    return _onUserInteractionEventChannel.receiveBroadcastStream();
+    return _onUserIntaeractionEventChannel.receiveBroadcastStream();
   }
 
   static Stream<Map<String, dynamic>> temiSubscribeToTtsEvents() {
     return _ttsEventChannel.receiveBroadcastStream();
+  }
+
+  static Stream<dynamic> temiSubscribeToAsrEvents() {
+    return _asrEventChannel.receiveBroadcastStream();
   }
 
   static Stream<Map<String, dynamic>> temiSubscribeToWakeupWordEvents() {
